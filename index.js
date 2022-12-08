@@ -16,13 +16,15 @@ async function getBlockchainInfo() {
     // Get the latest block
     const latestBlock = await web3.eth.getBlock(latestBlockNumber);
 
-
     const blockID = latestBlock.number;
     const timestamp = latestBlock.timestamp;
     const gasUsed = latestBlock.gasUsed;
     const baseFeePerGas = latestBlock.baseFeePerGas; // in Wei
     const blockReward = baseFeePerGas / Math.pow(10, 18) * gasUsed; // in Ether
     const minerAddress = latestBlock.miner;
+    // const parentBlock = await web3.eth.getBlock(latestBlock.parentHash);
+    // const parentID = parentBlock.number;
+    const parentID = blockID === 0 ? null : blockID - 1;
 
     // console.log(blockID);
     // console.log(timestamp);
@@ -32,7 +34,8 @@ async function getBlockchainInfo() {
     writeData(`blockID: ${blockID} \n`);
     writeData(`timestamp: ${timestamp} \n`);
     writeData(`blockReward: ${blockReward} \n`);
-    writeData(`minerAddress: ${minerAddress} \n\n`);
+    writeData(`minerAddress: ${minerAddress} \n`);
+    writeData(`parentID: ${parentID} \n\n`);
 
 
     const transactions = latestBlock.transactions;
@@ -86,7 +89,7 @@ async function getTransactionInfo(transactionHash) {
     writeData(`gasUsed: ${gasUsed} \n`);
     writeData(`blockID: ${blockID} \n`);
     writeData(`status: ${status} \n\n`);
-    
+
   } catch (error) {
     console.error(error);
   }
