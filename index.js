@@ -58,6 +58,13 @@ async function getTransactionInfo(transactionHash) {
     const transactionFee = gasPrice / Math.pow(10, 18) * gasUsed; // in Ether
     const blockID = transaction.blockNumber;
   
+    let fromBalance = await web3.eth.getBalance(from); // a String in Wei
+    let toBalance = await web3.eth.getBalance(to); // a String in Wei
+
+    // Convert to Ether
+    fromBalance = Number(fromBalance) / Math.pow(10, 18);
+    toBalance = Number(toBalance) / Math.pow(10, 18);
+
     // console.log(transactionHash);
     // console.log(value);
     // console.log(from);
@@ -69,11 +76,16 @@ async function getTransactionInfo(transactionHash) {
     writeData(`transactionHash: ${transactionHash} \n`);
     writeData(`value: ${value} \n`);
     writeData(`from: ${from} \n`);
+    writeData(`fromBalance: ${fromBalance} \n`);
     writeData(`to: ${to} \n`);
+    writeData(`toBalance: ${toBalance} \n`);
     writeData(`transactionFee: ${transactionFee} \n`);
     writeData(`gasUsed: ${gasUsed} \n`);
     writeData(`blockID: ${blockID} \n\n`);
+
     
+    
+
   } catch (error) {
     console.error(error);
   }
@@ -89,8 +101,8 @@ async function writeData(data) {
   });
 }
 
-// getTransactionInfo("0xfb16f2cf8bfcb1b2fa6058f6e027f20ba9d8cd0063743aa5a6e8f785c8468d8d");
-getBlockchainInfo();
+getTransactionInfo("0xfb16f2cf8bfcb1b2fa6058f6e027f20ba9d8cd0063743aa5a6e8f785c8468d8d");
+// getBlockchainInfo();
 
 
 // app.get('/', (req, res) => {
