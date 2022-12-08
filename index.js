@@ -49,7 +49,7 @@ async function getTransactionInfo(transactionHash) {
     // Get the transaction object
     const transaction = await web3.eth.getTransaction(transactionHash);
     const transactionReceipt = await web3.eth.getTransactionReceipt(transactionHash);
-    const status = transactionReceipt.status; // TRUE if the transaction was successful, FALSE if the EVM reverted the transaction.
+    let status = transactionReceipt.status; // TRUE if the transaction was successful, FALSE if the EVM reverted the transaction.
     const from = transaction.from;
     const to = transaction.to;
     const value = transaction.value / Math.pow(10, 18); // in Ether
@@ -65,6 +65,9 @@ async function getTransactionInfo(transactionHash) {
     fromBalance = Number(fromBalance) / Math.pow(10, 18);
     toBalance = Number(toBalance) / Math.pow(10, 18);
 
+    // Convert status
+    status = status ? "Success" : "Failed";
+    
     // console.log(transactionHash);
     // console.log(value);
     // console.log(from);
@@ -81,11 +84,9 @@ async function getTransactionInfo(transactionHash) {
     writeData(`toBalance: ${toBalance} \n`);
     writeData(`transactionFee: ${transactionFee} \n`);
     writeData(`gasUsed: ${gasUsed} \n`);
-    writeData(`blockID: ${blockID} \n\n`);
-
+    writeData(`blockID: ${blockID} \n`);
+    writeData(`status: ${status} \n\n`);
     
-    
-
   } catch (error) {
     console.error(error);
   }
