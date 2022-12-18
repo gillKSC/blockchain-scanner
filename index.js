@@ -4,9 +4,21 @@ const port = 3000
 const Web3 = require('web3');
 const web3 = new Web3('https://mainnet.infura.io/v3/6c45c5cbea0745da847693814b280766');
 const fs = require('fs');
+// get the client
+const mysql = require('mysql2');
 
 const filePath = './hello.txt';
 const data = 'Hello world';
+
+// create the pool
+const pool = mysql.createPool({  
+  host: 'dbase.cs.jhu.edu',
+  user: '',
+  password: '', 
+  database: ''
+});
+// now get a Promise wrapped instance of that pool
+const promisePool = pool.promise();
 
 async function getBlockchainInfo() {
   try {
@@ -22,6 +34,12 @@ async function getBlockchainInfo() {
     const baseFeePerGas = latestBlock.baseFeePerGas; // in Wei
     const blockReward = baseFeePerGas / Math.pow(10, 18) * gasUsed; // in Ether
     const minerAddress = latestBlock.miner;
+
+    let minerBalance = await web3.eth.getBalance(minerAddress); // a String in Wei
+
+    // Convert to Ether
+    minerBalance = Number(minerBalance) / Math.pow(10, 18);
+
     // const parentBlock = await web3.eth.getBlock(latestBlock.parentHash);
     // const parentID = parentBlock.number;
     const parentID = blockID === 0 ? null : blockID - 1;
@@ -37,6 +55,8 @@ async function getBlockchainInfo() {
     writeData(`minerAddress: ${minerAddress} \n`);
     writeData(`parentID: ${parentID} \n\n`);
 
+    await promisePool.query('INSERT INTO Wallet (balance, address) VALUES (?, ?)', [minerBalance, minerAddress]);
+    await promisePool.query('INSERT INTO Block (blockID, timeStamp, blockReward, minerAddress) VALUES (?, ?, ?, ?)', [blockID, timestamp, blockReward, minerAddress]);
 
     const transactions = latestBlock.transactions;
     transactions.forEach((transactionHash) => (getTransactionInfo(transactionHash)));
@@ -60,7 +80,7 @@ async function getTransactionInfo(transactionHash) {
     const gasPrice = transaction.gasPrice; // in Wei
     const transactionFee = gasPrice / Math.pow(10, 18) * gasUsed; // in Ether
     const blockID = transaction.blockNumber;
-  
+
     let fromBalance = await web3.eth.getBalance(from); // a String in Wei
     let toBalance = await web3.eth.getBalance(to); // a String in Wei
 
@@ -70,7 +90,7 @@ async function getTransactionInfo(transactionHash) {
 
     // Convert status
     status = status ? "Success" : "Failed";
-    
+
     // console.log(transactionHash);
     // console.log(value);
     // console.log(from);
@@ -79,16 +99,18 @@ async function getTransactionInfo(transactionHash) {
     // console.log(gasUsed);
     // console.log(blockID);
 
-    writeData(`transactionHash: ${transactionHash} \n`);
-    writeData(`value: ${value} \n`);
-    writeData(`from: ${from} \n`);
-    writeData(`fromBalance: ${fromBalance} \n`);
-    writeData(`to: ${to} \n`);
-    writeData(`toBalance: ${toBalance} \n`);
-    writeData(`transactionFee: ${transactionFee} \n`);
-    writeData(`gasUsed: ${gasUsed} \n`);
-    writeData(`blockID: ${blockID} \n`);
-    writeData(`status: ${status} \n\n`);
+    await promisePool.query('INSERT INTO Transaction (transactionHash, value, transactionFee, status, gasUsed, blockID) VALUES (?, ?, ?, ?, ?, ?)', [transactionHash, value, transactionFee, status, gasUsed, blockID]);
+
+    // writeData(`transactionHash: ${transactionHash} \n`);
+    // writeData(`value: ${value} \n`);
+    // writeData(`from: ${from} \n`);
+    // writeData(`fromBalance: ${fromBalance} \n`);
+    // writeData(`to: ${to} \n`);
+    // writeData(`toBalance: ${toBalance} \n`);
+    // writeData(`transactionFee: ${transactionFee} \n`);
+    // writeData(`gasUsed: ${gasUsed} \n`);
+    // writeData(`blockID: ${blockID} \n`);
+    // writeData(`status: ${status} \n\n`);
 
   } catch (error) {
     console.error(error);
@@ -105,8 +127,8 @@ async function writeData(data) {
   });
 }
 
-getTransactionInfo("0xfb16f2cf8bfcb1b2fa6058f6e027f20ba9d8cd0063743aa5a6e8f785c8468d8d");
-// getBlockchainInfo();
+// getTransactionInfo("0xfb16f2cf8bfcb1b2fa6058f6e027f20ba9d8cd0063743aa5a6e8f785c8468d8d");
+getBlockchainInfo();
 
 
 // app.get('/', (req, res) => {
