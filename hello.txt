@@ -1,0 +1,42 @@
+blockID: 16216057 
+timestamp: 1671420551 
+blockReward: 0.291373337336872 
+minerAddress: 0xDAFEA492D9c6733ae3d56b7Ed1ADB60692c98Bc5 
+parentID: 16216056 
+
+blockID: 16216090 
+timestamp: 1671420947 
+blockReward: 0.10891950535247485 
+minerAddress: 0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990 
+parentID: 16216089 
+
+blockID: 16216220 
+timestamp: 1671422519 
+blockReward: 0.11759185359750951 
+minerAddress: 0xFeebabE6b0418eC13b30aAdF129F5DcDd4f70CeA 
+parentID: 16216219 
+
+blockID: 16216222 
+timestamp: 1671422543 
+blockReward: 0.11857670125472433 
+minerAddress: 0x473780deAF4a2Ac070BBbA936B0cdefe7F267dFc 
+parentID: 16216221 
+
+blockID: 16216224 
+timestamp: 1671422567 
+blockReward: 0.1696618805623983 
+minerAddress: 0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990 
+parentID: 16216223 
+
+blockID: 16216246 
+timestamp: 1671422831 
+blockReward: 0.13850100713432154 
+minerAddress: 0xDAFEA492D9c6733ae3d56b7Ed1ADB60692c98Bc5 
+parentID: 16216245 
+
+blockID: 16216350 
+timestamp: 1671424079 
+blockReward: 0.3206728346984895 
+minerAddress: 0xFeebabE6b0418eC13b30aAdF129F5DcDd4f70CeA 
+parentID: 16216349 
+
