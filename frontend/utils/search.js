@@ -21,21 +21,33 @@ export default function PageWithJSbasedForm() {
         .select('*')
         .eq('address', data.input)
         .single();
-      router.push(`/wallet/${result.address}`);
+      if (result != null) {
+        router.push(`/wallet/${result.address}`);
+      } else {
+        alert(`This wallet does not exist`);
+      }
     } else if (length == 8) {
       const { data: result, error } = await supabase
         .from('block')
         .select('*')
         .eq('blockid', data.input)
         .single();
-      router.push(`/block/${result.blockid}`);
+      if (result != null) {
+        router.push(`/block/${result.blockid}`);
+      } else {
+        alert(`This block does not exist`);
+      }
     } else if (length == 66) {
       const { data: result, error } = await supabase
         .from('transaction')
         .select('*')
         .eq('transactionhash', data.input)
         .single();
-      router.push(`/transaction/${result.transactionhash}`);
+      if (result != null) {
+        router.push(`/transaction/${result.transactionhash}`);
+      } else {
+        alert(`This transaction does not exist`);
+      }
     } else {
       alert(
         `you can only search for wallet address, block id, or transaction hash`

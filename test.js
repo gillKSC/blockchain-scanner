@@ -87,7 +87,12 @@ async function getTransactionInfo(transactionHash) {
     const transactionReceipt = await web3.eth.getTransactionReceipt(
       transactionHash
     );
-    let status = transactionReceipt.status; // TRUE if the transaction was successful, FALSE if the EVM reverted the transaction.
+    let status = transactionReceipt.status;
+    if (transactionReceipt != null) {
+      status = status ? 'Success' : 'Failed';
+    } else {
+      status = 'Receipt not found';
+    }
     const from = transaction.from;
     const to = transaction.to;
     const value = transaction.value / Math.pow(10, 18); // in Ether
@@ -97,14 +102,19 @@ async function getTransactionInfo(transactionHash) {
     const blockID = transaction.blockNumber;
 
     let fromBalance = await web3.eth.getBalance(from); // a String in Wei
-    let toBalance = await web3.eth.getBalance(to); // a String in Wei
-
-    // Convert to Ether
     fromBalance = Number(fromBalance) / Math.pow(10, 18);
-    toBalance = Number(toBalance) / Math.pow(10, 18);
+    const { data: fromWallet } = await supabase
+      .from('wallet')
+      .upsert({ balance: fromBalance, address: from });
+    if (to != null) {
+      let toBalance = await web3.eth.getBalance(to);
+      toBalance = Number(toBalance) / Math.pow(10, 18);
+      const { data: toWallet } = await supabase
+        .from('wallet')
+        .upsert({ balance: toBalance, address: to });
+    }
 
     // Convert status
-    status = status ? 'Success' : 'Failed';
 
     // console.log(transactionHash);
     // console.log(value);
@@ -114,10 +124,22 @@ async function getTransactionInfo(transactionHash) {
     // console.log(gasUsed);
     // console.log(blockID);
 
-    await promisePool.query(
-      'INSERT INTO Transaction (transactionHash, value, transactionFee, status, gasUsed, blockID) VALUES (?, ?, ?, ?, ?, ?)',
-      [transactionHash, value, transactionFee, status, gasUsed, blockID]
-    );
+    const { data: transactions } = await supabase.from('transaction').upsert({
+      transactionhash: transactionHash,
+      value: value,
+      transactionfee: transactionFee,
+      status: status,
+      gasused: gasUsed,
+      blockid: blockID,
+    });
+
+    const { data: parties } = await supabase
+      .from('transaction_parties')
+      .upsert({
+        transactionhash: transactionHash,
+        fromaddress: from,
+        toaddress: to,
+      });
 
     // writeData(`transactionHash: ${transactionHash} \n`);
     // writeData(`value: ${value} \n`);
@@ -146,47 +168,64 @@ async function writeData(data) {
 
 async function test() {
   try {
-    const latestBlockNumber = await web3.eth.getBlockNumber();
+    const latestBlockNumber = (await web3.eth.getBlockNumber()) - 1000;
+    for (let i = 0; i < 10; i++) {
+      // Get the latest block
+      const latestBlock = await web3.eth.getBlock(latestBlockNumber + i);
 
-    // Get the latest block
-    const latestBlock = await web3.eth.getBlock(latestBlockNumber);
+      const blockID = latestBlock.number;
+      console.log(blockID);
+      const timestamp = latestBlock.timestamp;
+      const gasUsed = latestBlock.gasUsed;
+      const baseFeePerGas = latestBlock.baseFeePerGas; // in Wei
+      const blockReward = (baseFeePerGas / Math.pow(10, 18)) * gasUsed; // in Ether
+      const minerAddress = latestBlock.miner;
 
-    const blockID = latestBlock.number;
-    const timestamp = latestBlock.timestamp;
-    const gasUsed = latestBlock.gasUsed;
-    const baseFeePerGas = latestBlock.baseFeePerGas; // in Wei
-    const blockReward = (baseFeePerGas / Math.pow(10, 18)) * gasUsed; // in Ether
-    const minerAddress = latestBlock.miner;
+      let minerBalance = await web3.eth.getBalance(minerAddress); // a String in Wei
 
-    let minerBalance = await web3.eth.getBalance(minerAddress); // a String in Wei
+      // Convert to Ether
+      minerBalance = Number(minerBalance) / Math.pow(10, 18);
 
-    // Convert to Ether
-    minerBalance = Number(minerBalance) / Math.pow(10, 18);
+      // const parentBlock = await web3.eth.getBlock(latestBlock.parentHash);
+      // const parentID = parentBlock.number;
+      const parentID = blockID === 0 ? null : blockID - 1;
 
-    // const parentBlock = await web3.eth.getBlock(latestBlock.parentHash);
-    // const parentID = parentBlock.number;
-    const parentID = blockID === 0 ? null : blockID - 1;
+      // console.log(blockID);
+      // console.log(timestamp);
+      // console.log(blockReward);
+      // console.log(minerAddress);
 
-    // console.log(blockID);
-    // console.log(timestamp);
-    // console.log(blockReward);
-    // console.log(minerAddress);
+      writeData(`blockID: ${blockID} \n`);
+      writeData(`timestamp: ${timestamp} \n`);
+      writeData(`blockReward: ${blockReward} \n`);
+      writeData(`minerAddress: ${minerAddress} \n`);
+      writeData(`parentID: ${parentID} \n\n`);
 
-    writeData(`blockID: ${blockID} \n`);
-    writeData(`timestamp: ${timestamp} \n`);
-    writeData(`blockReward: ${blockReward} \n`);
-    writeData(`minerAddress: ${minerAddress} \n`);
-    writeData(`parentID: ${parentID} \n\n`);
+      console.log(timestamp);
 
-    console.log(timestamp);
+      const { data: wallet } = await supabase
+        .from('wallet')
+        .upsert({ balance: minerBalance, address: minerAddress });
 
-    const { data: wallet, error } = await supabase
-      .from('wallet')
-      .insert({ balance: minerBalance, address: minerAddress });
+      const { data: block, error } = await supabase.from('block').upsert({
+        blockid: blockID,
+        timestamp: timestamp,
+        blockreward: blockReward,
+        mineraddress: minerAddress,
+      });
 
-    // Insert a row
+      const { data: block_parent } = await supabase
+        .from('block_parent')
+        .upsert({ childblock: blockID, parentblock: parentID });
 
-    console.log(wallet, error);
+      // Insert a row
+      console.log(block, error);
+      const transactions = latestBlock.transactions;
+      for (const transactionHash of transactions) {
+        console.log(transactionHash);
+        getTransactionInfo(transactionHash);
+      }
+    }
   } catch (error) {
     console.error(error);
   }

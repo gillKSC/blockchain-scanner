@@ -21,7 +21,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const walletDetails = ({ data, history }) => {
+const walletDetails = ({ data, from, to }) => {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -68,13 +68,14 @@ const walletDetails = ({ data, history }) => {
                 <TableRow>
                   <TableCell>Transaction Hash</TableCell>
                   <TableCell align='right'>Transaction Fee</TableCell>
+                  <TableCell align='right'>Value</TableCell>
                   <TableCell align='right'>Status</TableCell>
                   <TableCell align='right'>Gas</TableCell>
                   <TableCell align='right'>Block</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {history.map((Transaction) => (
+                {from.map((Transaction) => (
                   <TableRow
                     key={Transaction.transactionhash}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -90,6 +91,31 @@ const walletDetails = ({ data, history }) => {
                     <TableCell align='right'>
                       {Transaction.transactionfee}
                     </TableCell>
+                    <TableCell align='right'>{Transaction.value}</TableCell>
+                    <TableCell align='right'>{Transaction.status}</TableCell>
+                    <TableCell align='right'>{Transaction.gasused}</TableCell>
+                    <TableCell align='right'>{Transaction.blockid}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableBody>
+                {to.map((Transaction) => (
+                  <TableRow
+                    key={Transaction.transactionhash}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component='th' scope='row'>
+                      <Link
+                        className={styles.Link}
+                        href={`/transaction/${Transaction.transactionhash}`}
+                      >
+                        {Transaction.transactionhash}
+                      </Link>
+                    </TableCell>
+                    <TableCell align='right'>
+                      {Transaction.transactionfee}
+                    </TableCell>
+                    <TableCell align='right'>{Transaction.value}</TableCell>
                     <TableCell align='right'>{Transaction.status}</TableCell>
                     <TableCell align='right'>{Transaction.gasused}</TableCell>
                     <TableCell align='right'>{Transaction.blockid}</TableCell>
@@ -125,14 +151,20 @@ export const getStaticProps = async ({ params: { address } }) => {
     .select('*')
     .eq('address', address)
     .single();
-  const { data: history } = await supabase
+  const { data: from } = await supabase
     .from('transaction')
-    .select('*, transaction_parties(*)')
+    .select(`*, transaction_parties!inner(transactionhash, fromaddress)`)
     .eq('transaction_parties.fromaddress', address);
+  const { data: to } = await supabase
+    .from('transaction')
+    .select(`*, transaction_parties!inner(transactionhash, toaddress)`)
+    .eq('transaction_parties.toaddress', address);
+
   return {
     props: {
       data: wallet,
-      history: history,
+      from: from,
+      to: to,
     },
   };
 };
