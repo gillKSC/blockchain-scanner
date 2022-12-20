@@ -14,6 +14,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { visuallyHidden } from '@mui/utils';
+import BarChart from '../Bar';
 
 const headCells = [
   {
@@ -94,7 +95,7 @@ function EnhancedTableHead(props) {
   );
 }
 
-function Wallet({ data }) {
+function Wallet({ data, freq }) {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
 
@@ -134,13 +135,21 @@ function Wallet({ data }) {
             </Link>
           </Button>
         </Box>
+        <div className='row'>
+          <div className='column'>
+            <p className={styles.description}>
+              <b>Wallets: </b>
+              {data.length} records in total
+            </p>
+          </div>
+          <div className='column'>
+            <BarChart data={freq} />
+          </div>
+        </div>
       </div>
+
       <main className={styles.main}>
         <Paper>
-          <p className={styles.description}>
-            <b>Wallets: </b>
-            {data.length} in total
-          </p>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <EnhancedTableHead
@@ -195,11 +204,13 @@ function Wallet({ data }) {
 export default Wallet;
 
 export async function getServerSideProps() {
-  const { data, error } = await supabase.from('wallet').select('*');
+  const { data: wallet } = await supabase.from('wallet').select('*');
+  const { data: freq } = await supabase.from('wallet_freq').select('*');
 
   return {
     props: {
-      data: data,
+      data: wallet,
+      freq: freq,
     },
   };
 }

@@ -6,60 +6,26 @@ import styles from '../styles/Home.module.css';
 export default function BarChart({ data }) {
   const canvasEl = useRef(null);
 
-  let balance = data.map((a) => a.balance);
-  const max = Math.max(balance);
-  let frequency = balanceay(10)
-    .fill()
-    .map((x, i) => i);
+  let range = data.map((a) => a.range);
+  let count = data.map((a) => a.count);
   useEffect(() => {
     const ctx = canvasEl.current.getContext('2d');
     // const ctx = document.getElementById("myChart");
     const data = {
-      labels: miner,
+      labels: range,
       datasets: [
         {
-          label: 'block value',
-          data: balance,
+          label: 'balance frequency',
+          data: count,
         },
       ],
     };
     const config = {
-      type: 'line',
+      type: 'bar',
       data: data,
     };
     Chart.defaults.font.size = 10;
-    const options = {
-      scales: {
-        x: {
-          type: 'linear',
-          offset: false,
-          grid: {
-            offset: false,
-          },
-          ticks: {
-            stepSize: 1,
-          },
-          title: {
-            display: true,
-            text: 'Hours',
-            font: {
-              size: 14,
-            },
-          },
-        },
-        y: {
-          // beginAtZero: true
-          title: {
-            display: true,
-            text: 'Visitors',
-            font: {
-              size: 14,
-            },
-          },
-        },
-      },
-    };
-    const myBarChart = new Chart(ctx, config, options);
+    const myBarChart = new Chart(ctx, config);
     return function cleanup() {
       myBarChart.destroy();
     };
@@ -75,7 +41,7 @@ export default function BarChart({ data }) {
 }
 
 export async function getServerSideProps() {
-  const { data, error } = await supabase.from('wallet').select('*');
+  const { data, error } = await supabase.from('wallet_freq').select('*');
 
   return {
     props: {
