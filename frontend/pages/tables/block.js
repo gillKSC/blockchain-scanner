@@ -8,12 +8,14 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
 import TablePagination from '@mui/material/TablePagination';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
+import LineChart from '../chart';
 
 function date(unixTimestamp) {
   var date = new Date(unixTimestamp * 1000);
@@ -21,7 +23,6 @@ function date(unixTimestamp) {
   let time = date.toLocaleTimeString('en-US').toString();
   return day.concat(' ', time);
 }
-
 const headCells = [
   {
     id: 'blockid',
@@ -153,13 +154,21 @@ function Block({ data, time }) {
             </Link>
           </Button>
         </Box>
+        <div class='row'>
+          <div class='column'>
+            <p className={styles.description}>
+              <b>Blocks: </b>
+              {data.length} in total
+            </p>
+          </div>
+          <div class='column'>
+            <LineChart data={data} />
+          </div>
+        </div>
       </div>
+
       <main className={styles.main}>
         <Paper>
-          <p className={styles.description}>
-            <b>Blocks: </b>
-            {data.length} in total
-          </p>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <EnhancedTableHead
