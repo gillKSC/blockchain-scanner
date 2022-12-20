@@ -122,7 +122,7 @@ const MyButton = React.forwardRef(({ onClick, href }, ref) => {
   );
 });
 
-function Block({ data, time }) {
+function Block({ data, time, transaction_count }) {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
 
@@ -162,7 +162,7 @@ function Block({ data, time }) {
             </p>
           </div>
           <div className='column'>
-            <LineChart data={data} />
+            <LineChart data={transaction_count} />
           </div>
         </div>
       </div>
@@ -233,6 +233,7 @@ export default Block;
 
 export async function getServerSideProps() {
   const { data, error } = await supabase.from('block').select('*');
+  const { data: transaction_count } = await supabase.from('transaction_count').select('*');
   const newData = (data) =>
     data.map((item) => {
       var time = date(item.timestamp);
@@ -242,6 +243,7 @@ export async function getServerSideProps() {
   return {
     props: {
       data: newData(data),
+      transaction_count: newData(transaction_count),
     },
   };
 }

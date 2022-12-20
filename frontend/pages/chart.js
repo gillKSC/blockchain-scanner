@@ -13,7 +13,8 @@ export default function LineChart({ data }) {
   const canvasEl = useRef(null);
 
   let time = data.map((a) => a.time);
-  let reward = data.map((a) => a.blockreward);
+  let transaction_count = data.map((a) => a.count);
+  
   useEffect(() => {
     const ctx = canvasEl.current.getContext('2d');
     // const ctx = document.getElementById("myChart");
@@ -21,8 +22,8 @@ export default function LineChart({ data }) {
       labels: time,
       datasets: [
         {
-          label: 'block value',
-          data: reward,
+          label: 'block transaction count',
+          data: transaction_count,
           fill: false,
           borderWidth: 2,
           lineTension: 0.2,
@@ -51,7 +52,7 @@ export default function LineChart({ data }) {
 }
 
 export async function getServerSideProps() {
-  const { data, error } = await supabase.from('block').select('*');
+  const { data, error } = await supabase.from('transaction_count').select('*');
   const newData = (data) =>
     data.map((item) => {
       var time = date(item.timestamp);

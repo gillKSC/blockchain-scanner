@@ -30,3 +30,10 @@ create view wallet_freq as
   from wallet
   group by Range
   ORDER BY Range ASC;
+
+
+DROP view IF EXISTS transaction_count;
+create view transaction_count as
+  select block.blockid, timestamp, count(transactionhash)
+  from block inner join transaction on block.blockid = transaction.blockid
+  group by block.blockid, timestamp;
