@@ -154,14 +154,14 @@ function Block({ data, time }) {
             </Link>
           </Button>
         </Box>
-        <div class='row'>
-          <div class='column'>
+        <div className='row'>
+          <div className='column'>
             <p className={styles.description}>
               <b>Blocks: </b>
               {data.length} in total
             </p>
           </div>
-          <div class='column'>
+          <div className='column'>
             <LineChart data={data} />
           </div>
         </div>
