@@ -37,7 +37,7 @@ function date(unixTimestamp) {
   return day.concat(' ', time);
 }
 
-const blockDetails = ({ data, transactions, parent, time }) => {
+export default function blockDetails({ data, transactions, parent, time }) {
   return (
     <div className={styles.container}>
       <div className={styles.nav}>
@@ -134,7 +134,7 @@ const blockDetails = ({ data, transactions, parent, time }) => {
       </main>
     </div>
   );
-};
+}
 
 export const getStaticPaths = async () => {
   const { data, error } = await supabase.from('block').select('blockid');
@@ -175,5 +175,3 @@ export const getStaticProps = async ({ params: { id } }) => {
     },
   };
 };
-
-export default blockDetails;

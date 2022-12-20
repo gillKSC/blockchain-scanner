@@ -117,7 +117,8 @@ const MyButton = React.forwardRef(({ onClick, href }, ref) => {
     </a>
   );
 });
-function Transaction({ data }) {
+
+export default function Transaction({ data }) {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
 
@@ -218,25 +219,10 @@ function Transaction({ data }) {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-
-        {/* {data.map((Transaction) => {
-          return (
-            <h3 key={Transaction.transactionhash}>
-              <Link href={`/transaction/${Transaction.transactionhash}`}>
-                Transaction Hash: {Transaction.transactionhash},
-              </Link>
-              Transaction Fee: {Transaction.transactionfee}, Status:
-              {Transaction.status}, Gas: {Transaction.gasused},
-              {Transaction.blockid}
-            </h3>
-          );
-        })} */}
       </main>
     </div>
   );
 }
-
-export default Transaction;
 
 export async function getServerSideProps() {
   const { data, error } = await supabase.from('transaction').select('*');

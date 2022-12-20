@@ -122,7 +122,7 @@ const MyButton = React.forwardRef(({ onClick, href }, ref) => {
   );
 });
 
-function Block({ data, time, transaction_count }) {
+export default function Block({ data, time, transaction_count }) {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
 
@@ -229,11 +229,11 @@ function Block({ data, time, transaction_count }) {
   );
 }
 
-export default Block;
-
 export async function getServerSideProps() {
   const { data, error } = await supabase.from('block').select('*');
-  const { data: transaction_count } = await supabase.from('transaction_count').select('*');
+  const { data: transaction_count } = await supabase
+    .from('transaction_count')
+    .select('*');
   const newData = (data) =>
     data.map((item) => {
       var time = date(item.timestamp);

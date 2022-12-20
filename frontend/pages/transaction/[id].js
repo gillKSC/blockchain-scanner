@@ -24,7 +24,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const transactionDetails = ({ data, parties }) => {
+export default function transactionDetails({ data, parties }) {
   return (
     <div className={styles.container}>
       <div className={styles.nav}>
@@ -97,7 +97,7 @@ const transactionDetails = ({ data, parties }) => {
       </main>
     </div>
   );
-};
+}
 
 export const getStaticPaths = async () => {
   const { data, error } = await supabase
@@ -136,5 +136,3 @@ export const getStaticProps = async ({ params: { id } }) => {
     },
   };
 };
-
-export default transactionDetails;

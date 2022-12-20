@@ -29,18 +29,18 @@ export default function Home() {
             <p>Check the miners</p>
           </Link> 
 
-          <a href="/tables/block" className={styles.card}>
+          <Link href="/tables/block" className={styles.card}>
             <h2>Blocks &rarr;</h2>
             <p>Check the blocks</p>
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/tables/transaction"
             className={styles.card}
           >
             <h2>Transactions &rarr;</h2>
             <p>Check history transactions</p>
-          </a>
+          </Link>
 
         </div>
       </main>
