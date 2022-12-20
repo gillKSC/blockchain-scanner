@@ -42,11 +42,11 @@ export default function LineChart({ data }) {
   });
 
   return (
-    <div className={styles.graph}>
+    <graph>
       <div className={styles.section}>
         <canvas id='myLineChart' ref={canvasEl} />
       </div>
-    </div>
+    </graph>
   );
 }
 

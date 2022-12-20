@@ -11,11 +11,11 @@ export default function Home() {
       <main className={styles.home}>
         
         <h1 className={styles.title}>
-          DB Final Project
+        blockchain scanner
         </h1>
         <div className={styles.grid}>
         <p className={styles.description}>
-          Search for data here:&nbsp;
+          Search for wallet address, block id, or transaction hash here:&nbsp;
         </p>
         <PageWithJSbasedForm/></div>
         <div className={styles.grid}>

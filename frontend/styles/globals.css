@@ -22,6 +22,15 @@ a {
   display: flex;
 }
 
+graph {
+  padding: 1rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .column {
   
   flex: 100%;

@@ -32,11 +32,11 @@ export default function BarChart({ data }) {
   });
 
   return (
-    <div className={styles.graph}>
+    <graph>
       <div className={styles.section}>
         <canvas id='myBarChart' ref={canvasEl} />
       </div>
-    </div>
+    </graph>
   );
 }
 
