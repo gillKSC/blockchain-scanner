@@ -8,11 +8,6 @@ const web3 = new Web3(
 const fs = require('fs');
 // get the client
 const mysql = require('mysql2');
-const { createClient } = require('@supabase/supabase-js');
-const supabase = createClient(
-  'https://viqaqlyfbhvqerbkpedh.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpcWFxbHlmYmh2cWVyYmtwZWRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzE0MDE4MTQsImV4cCI6MTk4Njk3NzgxNH0.N73T29e-2Dg50oDxXSYgeHfKsTzlXlF7Uu8AGUU1ZZ0'
-);
 
 const filePath = './hello.txt';
 const data = 'Hello world';
@@ -144,56 +139,9 @@ async function writeData(data) {
   });
 }
 
-async function test() {
-  try {
-    const latestBlockNumber = await web3.eth.getBlockNumber();
-
-    // Get the latest block
-    const latestBlock = await web3.eth.getBlock(latestBlockNumber);
-
-    const blockID = latestBlock.number;
-    const timestamp = latestBlock.timestamp;
-    const gasUsed = latestBlock.gasUsed;
-    const baseFeePerGas = latestBlock.baseFeePerGas; // in Wei
-    const blockReward = (baseFeePerGas / Math.pow(10, 18)) * gasUsed; // in Ether
-    const minerAddress = latestBlock.miner;
-
-    let minerBalance = await web3.eth.getBalance(minerAddress); // a String in Wei
-
-    // Convert to Ether
-    minerBalance = Number(minerBalance) / Math.pow(10, 18);
-
-    // const parentBlock = await web3.eth.getBlock(latestBlock.parentHash);
-    // const parentID = parentBlock.number;
-    const parentID = blockID === 0 ? null : blockID - 1;
-
-    // console.log(blockID);
-    // console.log(timestamp);
-    // console.log(blockReward);
-    // console.log(minerAddress);
-
-    writeData(`blockID: ${blockID} \n`);
-    writeData(`timestamp: ${timestamp} \n`);
-    writeData(`blockReward: ${blockReward} \n`);
-    writeData(`minerAddress: ${minerAddress} \n`);
-    writeData(`parentID: ${parentID} \n\n`);
-
-    console.log(timestamp);
-
-    const { data: wallet, error } = await supabase
-      .from('wallet')
-      .insert({ balance: minerBalance, address: minerAddress });
-
-    // Insert a row
-
-    console.log(wallet, error);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 // getTransactionInfo("0xfb16f2cf8bfcb1b2fa6058f6e027f20ba9d8cd0063743aa5a6e8f785c8468d8d");
-test();
+getBlockchainInfo();
+
 // app.get('/', (req, res) => {
 //   res.send('Hello World!')
 // })
