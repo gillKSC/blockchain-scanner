@@ -1,16 +1,20 @@
 import supabase from '../../utils/supabase';
 import Link from 'next/link';
+import * as React from 'react';
 import styles from '../../styles/Home.module.css';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+
+const MyButton = React.forwardRef(({ onClick, href }, ref) => {
+  return (
+    <a href={href} onClick={onClick} ref={ref}>
+      Home
+    </a>
+  );
+});
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -23,6 +27,15 @@ const Item = styled(Paper)(({ theme }) => ({
 const transactionDetails = ({ data, parties }) => {
   return (
     <div className={styles.container}>
+      <div className={styles.nav}>
+        <Box sx={{ pt: 4 }}>
+          <Button variant='contained'>
+            <Link href='/' passHref legacyBehavior>
+              <MyButton />
+            </Link>
+          </Button>
+        </Box>
+      </div>
       <main className={styles.main}>
         <div className='container flex justify-center'>
           <h1>Transaction Details</h1>
@@ -32,7 +45,7 @@ const transactionDetails = ({ data, parties }) => {
           <Grid container spacing={2} columns={16}>
             <Grid xs={16}>
               <Item>
-                <b>Hash</b> {data.transactionhash}
+                <b>Hash:</b> {data.transactionhash}
               </Item>
             </Grid>
             <Grid xs={16}>
@@ -83,29 +96,6 @@ const transactionDetails = ({ data, parties }) => {
         </Box>
       </main>
     </div>
-    // <div>
-    //   <h1>{data.transactionhash}</h1>
-    //   <p>Value: {data.value}</p>
-    //   <p>Transaction Fee: {data.transactionfee}</p>
-    //   <p>
-    //     Status:
-    //     {data.status}
-    //   </p>
-    //   <p>Gas: {data.gasused}</p>
-    //   <p>
-    //     <Link href={`/block/${data.blockid}`}> Block: {data.blockid}</Link>
-    //   </p>
-    //   <p>
-    //     <Link href={`/wallet/${parties.fromaddress}`}>
-    //       From: {parties.fromaddress}
-    //     </Link>
-    //   </p>
-    //   <p>
-    //     <Link href={`/wallet/${parties.toaddress}`}>
-    //       To: {parties.toaddress}
-    //     </Link>
-    //   </p>
-    // </div>
   );
 };
 

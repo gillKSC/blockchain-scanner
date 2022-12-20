@@ -1,4 +1,5 @@
 import supabase from '../../utils/supabase';
+import * as React from 'react';
 import Link from 'next/link';
 import styles from '../../styles/Home.module.css';
 import { styled } from '@mui/material/styles';
@@ -11,6 +12,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+
+const MyButton = React.forwardRef(({ onClick, href }, ref) => {
+  return (
+    <a href={href} onClick={onClick} ref={ref}>
+      Home
+    </a>
+  );
+});
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,9 +40,18 @@ function date(unixTimestamp) {
 const blockDetails = ({ data, transactions, parent, time }) => {
   return (
     <div className={styles.container}>
+      <div className={styles.nav}>
+        <Box sx={{ pt: 4 }}>
+          <Button variant='contained'>
+            <Link href='/' passHref legacyBehavior>
+              <MyButton />
+            </Link>
+          </Button>
+        </Box>
+      </div>
       <main className={styles.main}>
         <p className={styles.tuple}>Block Details</p>
-        <Box sx={{ width: 600, height: 230 }}>
+        <Box sx={{ width: 600, height: 230, pb: 1 }}>
           <Grid container spacing={2} columns={16}>
             <Grid xs={16}>
               <Item>
@@ -67,7 +86,11 @@ const blockDetails = ({ data, transactions, parent, time }) => {
             )}
           </Grid>
         </Box>
-        <p className={styles.tuple}>Transactions Contained</p>
+        <Box sx={{ pt: 4 }}>
+          <p>
+            <b>Transactions Contained:</b> {transactions.length} in total
+          </p>
+        </Box>
         <div className='container flex justify-center'>
           <TableContainer component={Paper}>
             <Table
@@ -108,30 +131,6 @@ const blockDetails = ({ data, transactions, parent, time }) => {
             </Table>
           </TableContainer>
         </div>
-        {/* <div>
-          <h1>{data.blockid}</h1>
-          <p>
-            Timestamp: {data.timestamp}, Reward: {data.blockreward},
-            <Link href={`/wallet/${data.mineraddress}`}>
-              Miner: {data.mineraddress}
-            </Link>
-          </p>
-        </div>
-        {transactions.map((Transaction) => {
-          return (
-            <h4 key={Transaction.transactionhash}>
-              <p>
-                <Link href={`/transaction/${Transaction.transactionhash}`}>
-                  Transaction Hash: {Transaction.transactionhash},
-                </Link>
-              </p>
-              <p> Transaction Fee: {Transaction.transactionfee}</p>
-              <p> Status: {Transaction.status}</p>
-              <p> Gas: {Transaction.gasused}</p>
-              <p> Block: {Transaction.blockid}</p>
-            </h4>
-          );
-        })} */}
       </main>
     </div>
   );

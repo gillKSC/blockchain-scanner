@@ -2,9 +2,27 @@
   padding: 0 2rem;
 }
 
+.nav {
+  padding: 0 10rem;
+  display: left;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+}
+
 .main {
   min-height: 50vh;
-  padding: 4rem 0;
+  padding: 2rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home {
+  min-height: 80vh;
+  padding: 2rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;

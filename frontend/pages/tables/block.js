@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import { visuallyHidden } from '@mui/utils';
 
 function date(unixTimestamp) {
@@ -112,6 +113,14 @@ function EnhancedTableHead(props) {
   );
 }
 
+const MyButton = React.forwardRef(({ onClick, href }, ref) => {
+  return (
+    <a href={href} onClick={onClick} ref={ref}>
+      Home
+    </a>
+  );
+});
+
 function Block({ data, time }) {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
@@ -136,20 +145,21 @@ function Block({ data, time }) {
 
   return (
     <div className={styles.container}>
+      <div className={styles.nav}>
+        <Box sx={{ p: 4 }}>
+          <Button variant='contained'>
+            <Link href='/' passHref legacyBehavior>
+              <MyButton />
+            </Link>
+          </Button>
+        </Box>
+      </div>
       <main className={styles.main}>
-        {/* {data.map((Block) => {
-          return (
-            <h3 key={Block.blockid}>
-              <Link href={`/block/${Block.blockid}`}>ID: {Block.blockid},</Link>
-              Timestamp: {Block.timestamp}, Reward: {Block.blockreward},
-              <Link href={`/wallet/${Block.mineraddress}`}>
-                Miner: {Block.mineraddress}
-              </Link>
-            </h3>
-          );
-        })} */}
         <Paper>
-          <h1 style={{ textAlign: 'center', color: 'black' }}>Blocks</h1>
+          <p className={styles.description}>
+            <b>Blocks: </b>
+            {data.length} in total
+          </p>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <EnhancedTableHead

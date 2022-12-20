@@ -169,7 +169,7 @@ async function writeData(data) {
 async function test() {
   try {
     const latestBlockNumber = (await web3.eth.getBlockNumber()) - 1000;
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
       // Get the latest block
       const latestBlock = await web3.eth.getBlock(latestBlockNumber + i);
 

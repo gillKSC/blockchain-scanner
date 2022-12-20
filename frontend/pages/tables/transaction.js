@@ -12,14 +12,8 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import { visuallyHidden } from '@mui/utils';
-
-function date(unixTimestamp) {
-  var date = new Date(unixTimestamp * 1000);
-  let day = date.toLocaleDateString('en-US').toString();
-  let time = date.toLocaleTimeString('en-US').toString();
-  return day.concat(' ', time);
-}
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -116,6 +110,13 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
+const MyButton = React.forwardRef(({ onClick, href }, ref) => {
+  return (
+    <a href={href} onClick={onClick} ref={ref}>
+      Home
+    </a>
+  );
+});
 function Transaction({ data }) {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
@@ -140,9 +141,21 @@ function Transaction({ data }) {
 
   return (
     <div className={styles.container}>
+      <div className={styles.nav}>
+        <Box sx={{ p: 4 }}>
+          <Button variant='contained'>
+            <Link href='/' passHref legacyBehavior>
+              <MyButton />
+            </Link>
+          </Button>
+        </Box>
+      </div>
       <main className={styles.main}>
         <Paper>
-          <h1 style={{ textAlign: 'center', color: 'black' }}>Transactions</h1>
+          <p className={styles.description}>
+            <b>Transactions: </b>
+            {data.length} in total
+          </p>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <EnhancedTableHead
@@ -227,7 +240,6 @@ export default Transaction;
 
 export async function getServerSideProps() {
   const { data, error } = await supabase.from('transaction').select('*');
-
   return {
     props: {
       data: data,

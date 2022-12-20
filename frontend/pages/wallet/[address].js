@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import * as React from 'react';
 import styles from '../../styles/Home.module.css';
 import supabase from '../../utils/supabase';
 import { styled } from '@mui/material/styles';
@@ -12,6 +12,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+
+const MyButton = React.forwardRef(({ onClick, href }, ref) => {
+  return (
+    <a href={href} onClick={onClick} ref={ref}>
+      Home
+    </a>
+  );
+});
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -24,6 +33,15 @@ const Item = styled(Paper)(({ theme }) => ({
 const walletDetails = ({ data, from, to }) => {
   return (
     <div className={styles.container}>
+      <div className={styles.nav}>
+        <Box sx={{ pt: 4 }}>
+          <Button variant='contained'>
+            <Link href='/' passHref legacyBehavior>
+              <MyButton />
+            </Link>
+          </Button>
+        </Box>
+      </div>
       <main className={styles.main}>
         <p className={styles.tuple}>Wallet Details</p>
         <Box sx={{ width: 600, height: 100 }}>
@@ -40,23 +58,11 @@ const walletDetails = ({ data, from, to }) => {
             </Grid>
           </Grid>
         </Box>
-
-        {/* {history.map((Transaction) => {
-          return (
-            <h4 key={Transaction.transactionhash}>
-              <p>
-                <Link href={`/transaction/${Transaction.transactionhash}`}>
-                  Transaction Hash: {Transaction.transactionhash},
-                </Link>
-              </p>
-              <p> Transaction Fee: {Transaction.transactionfee}</p>
-              <p> Status: {Transaction.status}</p>
-              <p> Gas: {Transaction.gasused}</p>
-              <p> Block: {Transaction.blockid}</p>
-            </h4>
-          );
-        })} */}
-        <p className={styles.tuple}>Transaction History</p>
+        <Box sx={{ pt: 4 }}>
+          <p>
+            <b>Transactions History:</b> {from.length + to.length} in total
+          </p>
+        </Box>
         <div className='container flex justify-center'>
           <TableContainer component={Paper}>
             <Table
@@ -152,13 +158,13 @@ export const getStaticProps = async ({ params: { address } }) => {
     .eq('address', address)
     .single();
   const { data: from } = await supabase
-    .from('transaction')
-    .select(`*, transaction_parties!inner(transactionhash, fromaddress)`)
-    .eq('transaction_parties.fromaddress', address);
+    .from('transaction_history')
+    .select('*')
+    .eq('fromaddress', address);
   const { data: to } = await supabase
-    .from('transaction')
-    .select(`*, transaction_parties!inner(transactionhash, toaddress)`)
-    .eq('transaction_parties.toaddress', address);
+    .from('transaction_history')
+    .select('*')
+    .eq('toaddress', address);
 
   return {
     props: {

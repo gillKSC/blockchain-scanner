@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import { visuallyHidden } from '@mui/utils';
 
 const headCells = [
@@ -114,11 +115,32 @@ function Wallet({ data }) {
     setrpg(parseInt(event.target.value, 10));
     setpg(0);
   }
+
+  const MyButton = React.forwardRef(({ onClick, href }, ref) => {
+    return (
+      <a href={href} onClick={onClick} ref={ref}>
+        Home
+      </a>
+    );
+  });
+
   return (
     <div className={styles.container}>
+      <div className={styles.nav}>
+        <Box sx={{ p: 4 }}>
+          <Button variant='contained'>
+            <Link href='/' passHref legacyBehavior>
+              <MyButton />
+            </Link>
+          </Button>
+        </Box>
+      </div>
       <main className={styles.main}>
         <Paper>
-          <h1 style={{ textAlign: 'center', color: 'black' }}>Wallets</h1>
+          <p className={styles.description}>
+            <b>Wallets: </b>
+            {data.length} in total
+          </p>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <EnhancedTableHead
@@ -165,59 +187,6 @@ function Wallet({ data }) {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-      </main>
-    </div>
-  );
-  return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <div className='container flex justify-center'>
-          <h1>Wallets</h1>
-        </div>
-
-        {/* {data.map((Wallet) => {
-        return (
-          <h3 key={Wallet.address}>
-            <Link href={`/wallet/${Wallet.address}`}>
-              Address: {Wallet.address}, Balance: {Wallet.balance}
-            </Link>
-          </h3>
-        );
-      })} */}
-        <div className='container flex justify-center'>
-          <TableContainer component={Paper}>
-            <Table
-              sx={{ minWidth: 650 }}
-              size='small'
-              aria-label='a dense table'
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell>Address</TableCell>
-                  <TableCell align='right'>Balance</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.map((Wallet) => (
-                  <TableRow
-                    key={Wallet.address}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component='th' scope='row'>
-                      <Link
-                        className={styles.Link}
-                        href={`/wallet/${Wallet.address}`}
-                      >
-                        {Wallet.address}
-                      </Link>
-                    </TableCell>
-                    <TableCell align='right'>{Wallet.balance}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
       </main>
     </div>
   );
