@@ -6,7 +6,7 @@ This project is a simple blockchain scanner on the Ethereum blockchain. It provi
 
 To navigate through our web application: the user can click on the cards on the home page, each leading to a page presenting a table of relevant data.
 
-<img src="/images/nav.png" alt="Drawing" width="600"/>
+<img src="/images/nav.png" alt="Drawing" width="400"/>
 
 The user can click on the attributes of each table to sort the rows based on each attribute.
 
@@ -16,11 +16,11 @@ Then for each primary key and foreign key, the user can click on the hyperlink t
 
 Alternatively, the user can choose to directly input transaction hash, wallet address, or blockID in the search bar at home page to see the details.
 
-<img src="/images/search.png" alt="Drawing" width="600"/>
+<img src="/images/search.png" alt="Drawing" width="400"/>
 
 The application also provides an advanced GUI aided with data visualization for data analysis.
 
-<img src="/images/data.png" alt="Drawing" width="600"/>
+<img src="/images/data.png" alt="Drawing" width="400"/>
 
 ## Getting Started
 
@@ -77,7 +77,7 @@ To access the data stored on a blockchain network, we can run our own blockchain
    ```
 2. Run `insert_data.js`
    ```sh
-      node insert_data.js
+   node insert_data.js
    ```
 
 Now check the tables in Supabase, it should have data inserted now.
