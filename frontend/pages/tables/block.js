@@ -122,7 +122,7 @@ const MyButton = React.forwardRef(({ onClick, href }, ref) => {
   );
 });
 
-export default function Block({ data, time, transaction_count }) {
+const Block = ({ data, time, transaction_count }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
 
@@ -227,7 +227,11 @@ export default function Block({ data, time, transaction_count }) {
       </main>
     </div>
   );
-}
+};
+
+Block.displayName = 'Block';
+
+export default Block;
 
 export async function getServerSideProps() {
   const { data, error } = await supabase.from('block').select('*');

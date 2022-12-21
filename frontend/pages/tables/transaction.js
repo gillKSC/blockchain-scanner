@@ -118,7 +118,7 @@ const MyButton = React.forwardRef(({ onClick, href }, ref) => {
   );
 });
 
-export default function Transaction({ data }) {
+const Transaction = ({ data }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
 
@@ -222,7 +222,11 @@ export default function Transaction({ data }) {
       </main>
     </div>
   );
-}
+};
+
+Transaction.displayName = 'Transaction';
+
+export default Transaction;
 
 export async function getServerSideProps() {
   const { data, error } = await supabase.from('transaction').select('*');

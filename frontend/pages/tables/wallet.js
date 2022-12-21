@@ -95,7 +95,7 @@ function EnhancedTableHead(props) {
   );
 }
 
-export default function Wallet({ data, freq }) {
+const Wallet = ({ data, freq }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
 
@@ -199,7 +199,11 @@ export default function Wallet({ data, freq }) {
       </main>
     </div>
   );
-}
+};
+
+Wallet.displayName = 'Wallet';
+
+export default Wallet;
 
 export async function getServerSideProps() {
   const { data: wallet } = await supabase.from('wallet').select('*');

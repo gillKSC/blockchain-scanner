@@ -30,7 +30,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function walletDetails({ data, from, to }) {
+const walletDetails = ({ data, from, to }) => {
   return (
     <div className={styles.container}>
       <div className={styles.nav}>
@@ -134,7 +134,11 @@ export default function walletDetails({ data, from, to }) {
       </main>
     </div>
   );
-}
+};
+
+walletDetails.displayName = 'walletDetails';
+
+export default walletDetails;
 
 export const getStaticPaths = async () => {
   const { data, error } = await supabase.from('wallet').select('address');
