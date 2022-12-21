@@ -81,17 +81,21 @@ const transactionDetails = ({ data, parties }) => {
             <Grid xs={16}>
               <Item>
                 <b>From: </b>
-                <Link href={`/wallet/${parties.fromaddress}`}>
+                {
+                  parties ? <Link href={`/wallet/${parties.fromaddress}`}>
                   <u>{parties.fromaddress}</u>
-                </Link>
+                </Link> : "from address doesn't exist"
+                }
               </Item>
             </Grid>
             <Grid xs={16}>
               <Item>
                 <b>To: </b>
-                <Link href={`/wallet/${parties.toaddress}`}>
+                {
+                  parties ? <Link href={`/wallet/${parties.toaddress}`}>
                   <u>{parties.toaddress}</u>
-                </Link>
+                </Link> : "to address doesn't exist"
+                }
               </Item>
             </Grid>
           </Grid>
