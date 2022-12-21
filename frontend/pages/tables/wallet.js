@@ -14,7 +14,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { visuallyHidden } from '@mui/utils';
-import BarChart from '../Bar';
+import BarChart from '../bar';
 
 const headCells = [
   {
