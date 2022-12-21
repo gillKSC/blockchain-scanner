@@ -52,6 +52,7 @@ The schema is designed as follows:
 ER aiagram
 
 <img src="/images/er.png" alt="Drawing" width="400"/>
+
 Relational table
 
 <img src="/images/table.png" alt="Drawing" width="400"/>
@@ -75,10 +76,9 @@ To access the data stored on a blockchain network, we can run our own blockchain
    KEY = 'ENTER YOUR SUPABASE KEY';
    ```
 2. Run `insert_data.js`
-
-```sh
-   node insert_data.js
-```
+   ```sh
+      node insert_data.js
+   ```
 
 Now check the tables in Supabase, it should have data inserted now.
 
