@@ -102,7 +102,14 @@ const walletDetails = ({ data, from, to }) => {
                     <TableCell align='right'>{Transaction.value}</TableCell>
                     <TableCell align='right'>{Transaction.status}</TableCell>
                     <TableCell align='right'>{Transaction.gasused}</TableCell>
-                    <TableCell align='right'>{Transaction.blockid}</TableCell>
+                    <TableCell align='right'>
+                      <Link
+                        className={styles.Link}
+                        href={`/block/${Transaction.blockid}`}
+                      >
+                        {Transaction.blockid}
+                      </Link>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
