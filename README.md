@@ -1,6 +1,6 @@
 # Database Project: Ethereum Blockchain Scanner
 
-This project is a simple blockchain scanner on the Ethereum blockchain. It provides a user-friendly interface for blockchain users, investors, developers, and regulators to analyze data and track activities.
+This project is a simple blockchain scanner on the Ethereum blockchain. It provides a user-friendly interface for blockchain users, investors, developers, and regulators to analyze data and track activities. Check it out [here](https://blockchain-scanner.netlify.app)!
 
 ## Getting Started
 This is an example of how you may give instructions on setting up your project locally. To get a local copy up and running follow these simple example steps.
