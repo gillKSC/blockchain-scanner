@@ -9,16 +9,21 @@ This project is a simple blockchain scanner on the Ethereum blockchain. It provi
 ### User Guide
 
 To navigate through our web application: the user can click on the cards on the home page, each leading to a page presenting a table of relevant data.
+
 <img src="/images/nav.png" alt="Drawing" width="600"/>
 
 The user can click on the attributes of each table to sort the rows based on each attribute.
+
 <img src="/images/sort.png" alt="Drawing" width="200"/>
+
 Then for each primary key and foreign key, the user can click on the hyperlink to see the details of that tuple as well.
 
 Alternatively, the user can choose to directly input transaction hash, wallet address, or blockID in the search bar at home page to see the details.
+
 <img src="/images/search.png" alt="Drawing" width="600"/>
 
 The application also provides an advanced GUI aided with data visualization for data analysis.
+
 <img src="/images/data.png" alt="Drawing" width="600"/>
 
 ## Getting Started
@@ -49,9 +54,12 @@ This is an example of how you may give instructions on setting up your project l
 The schema is designed as follows:
 
 ER aiagram
+
 <img src="/images/er.png" alt="Drawing" width="400"/>
 Relational table
+
 <img src="/images/table.png" alt="Drawing" width="400"/>
+
 See `create_table.sql for relational table specification.
 
 3. Enter Supabase url and key in `frontend/.env.local`
