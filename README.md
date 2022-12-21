@@ -2,10 +2,6 @@
 
 This project is a simple blockchain scanner on the Ethereum blockchain. It provides a user-friendly interface for blockchain users, investors, developers, and regulators to analyze data and track activities. Check it out [here](https://blockchain-scanner.netlify.app)!
 
-## Check out the demo first!
-
-[https://blockchain-db.netlify.app/](https://blockchain-db.netlify.app/)
-
 ### User Guide
 
 To navigate through our web application: the user can click on the cards on the home page, each leading to a page presenting a table of relevant data.
