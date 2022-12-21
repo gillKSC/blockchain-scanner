@@ -16,6 +16,8 @@ const MyButton = React.forwardRef(({ onClick, href }, ref) => {
   );
 });
 
+MyButton.displayName = 'MyButton';
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,

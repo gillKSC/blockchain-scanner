@@ -122,6 +122,8 @@ const MyButton = React.forwardRef(({ onClick, href }, ref) => {
   );
 });
 
+MyButton.displayName = 'MyButton';
+
 const Block = ({ data, time, transaction_count }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);

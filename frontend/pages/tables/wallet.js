@@ -125,6 +125,8 @@ const Wallet = ({ data, freq }) => {
     );
   });
 
+  MyButton.displayName = 'MyButton';
+
   return (
     <div className={styles.container}>
       <div className={styles.nav}>
